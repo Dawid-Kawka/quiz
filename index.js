@@ -42,6 +42,30 @@ class Quiz {
     }
 
     checkAnswer = () => {
+        this.userSelectedInput = document.querySelector("input[type='radio']:checked");
+        if (!this.userSelectedInput) return;
+
+        const selectedIndex = this.userSelectedInput.getAttribute("data-index");
+
+        if (selectedIndex == this.correctAnswerNum) {
+            // prawidłowa odpowiedź
+            this.userCorrectAnswersNum++;
+            this.userSelectedInput.classList.add("is-valid")
+        } else {
+            // nieprawidłowa odpowiedź
+            this.userBadAnswersNum++;
+            this.userSelectedInput.classList.add("is-invalid");
+        }
+
+        this.setUserStats();
+
+        this.saveAnswerButton.classList.add("disabled");
+        this.nextQuestionButton.classList.remove("disabled");
+    }
+
+    setUserStats = () => {
+        document.getElementById("correctAnswers").innerHTML = this.userCorrectAnswersNum;
+        document.getElementById("badAnswers").innerHTML = this.userBadAnswersNum;
 
     }
 
@@ -62,8 +86,14 @@ class Quiz {
         this.answer2.innerHTML = question.answers[2];
         this.correctAnswerNum = question.correctAnswerNum;
 
+        document.querySelectorAll("input[type='radio']").forEach((el) => {
+            el.classList.remove("is-valid");
+            el.classList.remove("is-invalid");
+            el.checked = false;
+        });
 
-
+        this.saveAnswerButton.classList.remove("disabled");
+        this.nextQuestionButton.classList.add("disabled");
     }
 };
 
